@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>ARCGIS APP - @yield('title')</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+        <title>ARCGIS APP  @yield('title')</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css">
-        <script src="https://js.arcgis.com/4.19/"></script>
+        <!-- <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/themes/light/main.css"> -->
+        <!-- <script src="https://js.arcgis.com/4.19/"></script>
+        <script>
+            require(["esri/config","esri/Map", "esri/views/MapView"], function (esriConfig,Map, MapView) {
+
+            });
+        </script> -->
+        <script src="{{ asset('js/require.js')}}"></script>
         <!-- Styles -->
         <style>
+            #viewDiv {
+                padding: 0;
+                margin: 0;
+                height: 100%;
+                width: 100%;
+            }
             html, body {
                 background-color: #fff;
                 color: #636b6f;
@@ -63,7 +76,7 @@
                 margin-bottom: 30px;
             }
         </style>
-        @yield('headline')
+      
     </head>
     <body>
         <div class="flex-center position-ref full-height">
@@ -81,7 +94,7 @@
                 </div>
             @endif
 
-            <div class="content">
+            <!-- <div class="content">
                 <div class="title m-b-md">
                     Laravel
                 </div>
@@ -96,7 +109,7 @@
                     <a href="https://vapor.laravel.com">Vapor</a>
                     <a href="https://github.com/laravel/laravel">GitHub</a>
                 </div>
-            </div>
+            </div> -->
         </div>
     </body>
 </html>
