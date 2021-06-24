@@ -28,7 +28,10 @@
                      "esri/widgets/Locate",
                      "esri/widgets/Track",
                      "esri/Graphic",
-                     "esri/layers/GraphicsLayer"
+                     "esri/layers/GraphicsLayer",                     
+                     "esri/tasks/RouteTask",
+                     "esri/tasks/support/RouteParameters",
+                     "esri/tasks/support/FeatureSet"
                      ], 
                      function (esriConfig, 
                                Map, 
@@ -37,7 +40,10 @@
                                Locate,
                                Track,
                                Graphic,
-                               GraphicsLayer
+                               GraphicsLayer,
+                               RouteTask,
+                               RouteParameters,
+                               FeatureSet
                                ) {
 
                         esriConfig.apiKey = "AAPK7c7895bf808a4f23b5d9f049944cebbdRBkAqsrkczQn96GKC9hWASWXII9K0ZIVOf8r2PUZgA8KfrpB4cYBBgUkZYwlWHo9";
@@ -62,8 +68,78 @@
                                         zoom: 18,
                                         container: "viewDiv" // Div element
                                     });
+                        //For routing
+                        const routeTask = new RouteTask({
+                                url: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
+                        });
+                        view.on("click", function(event){
+                            if (view.graphics.length === 0) {
+                                addGraphic("origin", event.mapPoint);
+                            } else if (view.graphics.length === 1) {
+                                addGraphic("destination", event.mapPoint);
+                                getRoute();
 
-                        // Add marker to location
+                            } else {
+                                view.graphics.removeAll();
+                                addGraphic("origin",event.mapPoint);
+                            }
+                        });
+                        function addGraphic(type, point) {
+                            const graphic = new Graphic({
+                                symbol: {
+                                type: "simple-marker",
+                                color: (type === "origin") ? "white" : "black",
+                                size: "8px"
+                                },
+                            geometry: point
+                            });
+                            view.graphics.add(graphic);
+                        }
+                        function getRoute() {
+                            const routeParams = new RouteParameters({
+                                stops: new FeatureSet({
+                                features: view.graphics.toArray()
+                                }),
+                                returnDirections: true
+                        });
+                        routeTask.solve(routeParams)
+                        .then(function(data) {
+                        data.routeResults.forEach(function(result) {
+                            result.route.symbol = {
+                            type: "simple-line",
+                            color: [5, 150, 255],
+                            width: 3
+                            };
+                            view.graphics.add(result.route);
+                        });
+
+                        // Display directions
+                        if (data.routeResults.length > 0) {
+                        const directions = document.createElement("ol");
+                        directions.classList = "esri-widget esri-widget--panel esri-directions__scroller";
+                        directions.style.marginTop = "0";
+                        directions.style.padding = "15px 15px 15px 30px";
+                        const features = data.routeResults[0].directions.features;
+
+                        // Show each direction
+                        features.forEach(function(result,i){
+                            const direction = document.createElement("li");
+                            var distance = (result.attributes.length.toFixed(2) * 1.609344);
+                            direction.innerHTML = result.attributes.text + " (" + distance + " km)";
+                            directions.appendChild(direction);
+                        });
+
+                        view.ui.empty("top-right");
+                        view.ui.add(directions, "top-right");
+                        }
+
+                        })
+                        .catch(function(error){
+                            console.log(error);
+                        })
+                        }
+                        //-------------------------
+                        // Add marker to home location
                         const graphicsLayer = new GraphicsLayer();
                         map.add(graphicsLayer);
                         const point = { //Create a point
@@ -275,15 +351,13 @@
                             });
                          view.ui.add(track, "top-left");
                         
-                         view.on("click", function(event) {
-                            let lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
-                            let lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
-                            console.log("click event at: (lat=" + lat + ", long=" + lon + ")");
-                         });
-
-                        //  function myClickHandler(evt) { //For JS 3.36
-                        //     console.log("You've clicked on the map!");
-                        //  }
+                        //  view.on("click", function(event) { //For getting long/lat via mouse click
+                        //     let lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+                        //     let lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+                        //     console.log("click event at: (lat=" + lat + ", long=" + lon + ")");
+                        //  });
+                        
+                        
                     // console.log(view);
                         //For debugging purposes
                         view.when(function(){
