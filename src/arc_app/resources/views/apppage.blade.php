@@ -47,9 +47,9 @@
                                     basemap: "arcgis-navigation"
                                     });
 
-                        mapOnLoad = map.on("load", function(){
-                            map.graphics.on("click", myClickHandler);
-                        });
+                        // mapOnLoad = map.on("load", function(){
+                        //     map.graphics.on("click", myClickHandler);
+                        // }); //For 3.36
 
                 
                         const view = new MapView({
@@ -275,14 +275,20 @@
                             });
                          view.ui.add(track, "top-left");
                         
-                         function myClickHandler(evt) {
-                            console.log("You've clicked on the map!");
-                         }
+                         view.on("click", function(event) {
+                            let lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
+                            let lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
+                            console.log("click event at: (lat=" + lat + ", long=" + lon + ")");
+                         });
+
+                        //  function myClickHandler(evt) { //For JS 3.36
+                        //     console.log("You've clicked on the map!");
+                        //  }
                     // console.log(view);
                         //For debugging purposes
                         view.when(function(){
                         // All the resources in the MapView and the map have loaded. Now execute additional processes
-                            console.log("I have some data!");
+                            console.log("I have some map data!");
                         }, function(error){
                             // Use the errback function to handle when the view doesn't load properly
                             console.log("The view's resources failed to load: ", error);
