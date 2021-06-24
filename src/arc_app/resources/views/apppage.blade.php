@@ -47,6 +47,11 @@
                                     basemap: "arcgis-navigation"
                                     });
 
+                        mapOnLoad = map.on("load", function(){
+                            map.graphics.on("click", myClickHandler);
+                        });
+
+                
                         const view = new MapView({
                                         map: map,
                                         //center: [-118.80543,34.02700], // Longitude, latitude
@@ -54,7 +59,7 @@
                                         //center: [-40, 28],
                                         center: [23.3023, 55.9461], //lon/lat
                                         //zoom: 13, // Zoom level
-                                        zoom: 10,
+                                        zoom: 18,
                                         container: "viewDiv" // Div element
                                     });
 
@@ -80,25 +85,73 @@
                         });
                         graphicsLayer.add(pointGraphic);
 
-                        // // Create a line geometry
-                        // const polyline = {
-                        //     type: "polyline",
-                        //     paths: [
-                        //         [23.3023, 55.9461], //Longitude, latitude
-                        //         [24.3023, 56.9461], //Longitude, latitude
-                        //         [22.3023, 54.9461]  //Longitude, latitude
-                        //     ]
-                        // };
-                        // const simpleLineSymbol = {
-                        //     type: "simple-line",
-                        //     color: [226, 119, 40], // Orange
-                        //     width: 2
-                        // };
-                        // const polylineGraphic = new Graphic({
-                        //     geometry: polyline,
-                        //     symbol: simpleLineSymbol
-                        // });
-                        // graphicsLayer.add(polylineGraphic);
+                        // Create a line connected area
+                        const polyline = {
+                            type: "polyline",
+                            paths: [
+                                [23.3023, 55.9461], //Longitude, latitude
+                                [23.3033, 55.9451], //Longitude, latitude
+                                [23.3040, 55.9470],
+                                [23.3023, 55.9461]  //Longitude, latitude
+                            ]
+                        };
+                        const simpleLineSymbol = {
+                            type: "simple-line",
+                            color: [226, 119, 40], // Orange
+                            width: 2
+                        };
+                        //Drawing poly lines and adding pop ups
+                        const linePopUpTemplate = {
+                            title: "{Name}",
+                            content: "{Description}"
+                        }
+                        const popUpLineAttributes = {
+                            Name: "My kingdom area lines",
+                            Description: "My kingdom territory lines:D"
+                        }
+                        const polylineGraphic = new Graphic({
+                            geometry: polyline,
+                            symbol: simpleLineSymbol,
+                            attributes: popUpLineAttributes,
+                            popupTemplate: linePopUpTemplate
+                        });
+                        graphicsLayer.add(polylineGraphic);
+                        //Create a polygon
+                        const polygon = {
+                            type: "polygon",
+                            rings: [
+                                [23.3023, 55.9461], //Longitude, latitude
+                                [23.3033, 55.9451], //Longitude, latitude
+                                [23.3040, 55.9470],
+                                [23.3023, 55.9461]  //Longitude, latitude
+                            ]
+                        };
+                        const simpleFillSymbol = {
+                                type: "simple-fill",
+                                color: [0, 255, 0, 0.5],  
+                                outline: {
+                                    color: [0, 255, 0],
+                                    width: 1
+                                }
+                        };
+                        
+                        //Drawing a polygon and adding pop ups to drawed geometry
+                        const polygonPopTemplate = {
+                            title: "{Name}",
+                            content: "{Description}"
+                        }
+                        const popUpPolyAttributes = {
+                            Name: "My kingdom area",
+                            Description: "The area in which I rule as a king!:)"
+                        }
+                        const polygonGraphic = new Graphic({
+                            geometry: polygon,
+                            symbol: simpleFillSymbol,
+                            attributes: popUpPolyAttributes,
+                            popupTemplate: polygonPopTemplate
+
+                        });
+                        graphicsLayer.add(polygonGraphic);
                         //-------------------------
                         const popupTrailheads = {
                             "title": "Information pop up",
@@ -221,7 +274,10 @@
                             useHeadingEnabled: false
                             });
                          view.ui.add(track, "top-left");
-
+                        
+                         function myClickHandler(evt) {
+                            console.log("You've clicked on the map!");
+                         }
                     // console.log(view);
                         //For debugging purposes
                         view.when(function(){
