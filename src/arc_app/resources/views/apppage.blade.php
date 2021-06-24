@@ -24,23 +24,82 @@
                      "esri/config",
                      "esri/Map", 
                      "esri/views/MapView",
-                     "esri/layers/FeatureLayer"
+                     "esri/layers/FeatureLayer",
+                     "esri/widgets/Locate",
+                     "esri/widgets/Track",
+                     "esri/Graphic",
+                     "esri/layers/GraphicsLayer"
                      ], 
-                     function (esriConfig, Map, MapView, FeatureLayer) {
+                     function (esriConfig, 
+                               Map, 
+                               MapView, 
+                               FeatureLayer, 
+                               Locate,
+                               Track,
+                               Graphic,
+                               GraphicsLayer
+                               ) {
 
                         esriConfig.apiKey = "AAPK7c7895bf808a4f23b5d9f049944cebbdRBkAqsrkczQn96GKC9hWASWXII9K0ZIVOf8r2PUZgA8KfrpB4cYBBgUkZYwlWHo9";
 
                         const map = new Map({
-                                    basemap: "arcgis-topographic" // Basemap layer service
+                                    //basemap: "arcgis-topographic" // Basemap layer service
+                                    basemap: "arcgis-navigation"
                                     });
 
                         const view = new MapView({
                                         map: map,
-                                        center: [-118.80543,34.02700], // Longitude, latitude
-                                        zoom: 13, // Zoom level
+                                        //center: [-118.80543,34.02700], // Longitude, latitude
+                                        //center: [55.946185897155274, 23.302453535021],
+                                        //center: [-40, 28],
+                                        center: [23.3023, 55.9461], //lon/lat
+                                        //zoom: 13, // Zoom level
+                                        zoom: 10,
                                         container: "viewDiv" // Div element
                                     });
 
+                        // Add marker to location
+                        const graphicsLayer = new GraphicsLayer();
+                        map.add(graphicsLayer);
+                        const point = { //Create a point
+                            type: "point",
+                            longitude: 23.3023,
+                            latitude:  55.9461
+                        };
+                        const simpleMarkerSymbol = {
+                            type: "simple-marker",
+                            color: [226, 119, 40],  // Orange
+                            outline: {
+                                color: [255, 255, 255], // White
+                                width: 1
+                            }
+                        };
+                        const pointGraphic = new Graphic({
+                            geometry: point,
+                            symbol: simpleMarkerSymbol
+                        });
+                        graphicsLayer.add(pointGraphic);
+
+                        // // Create a line geometry
+                        // const polyline = {
+                        //     type: "polyline",
+                        //     paths: [
+                        //         [23.3023, 55.9461], //Longitude, latitude
+                        //         [24.3023, 56.9461], //Longitude, latitude
+                        //         [22.3023, 54.9461]  //Longitude, latitude
+                        //     ]
+                        // };
+                        // const simpleLineSymbol = {
+                        //     type: "simple-line",
+                        //     color: [226, 119, 40], // Orange
+                        //     width: 2
+                        // };
+                        // const polylineGraphic = new Graphic({
+                        //     geometry: polyline,
+                        //     symbol: simpleLineSymbol
+                        // });
+                        // graphicsLayer.add(polylineGraphic);
+                        //-------------------------
                         const popupTrailheads = {
                             "title": "Information pop up",
                             "content": "<b>Trail:</b> {TRL_NAME}<br><b>City:</b> {CITY_JUR}<br><b>Cross Street:</b> {X_STREET}<br><b>Parking:</b> {PARKING}<br><b>Elevation:</b> {ELEV_FT} ft"
@@ -59,7 +118,7 @@
                             type: "media",
                             mediaInfos: [{
                                 type: "pie-chart",
-                                caption: "",
+                                caption: "Some data",
                                 value: {
                                 fields: [ "ELEV_MIN","ELEV_MAX" ],
                                 normalizeField: null,
@@ -134,7 +193,37 @@
                         });
 
                         map.add(openspaces,0);
+                        
+                        // Geo Location tracking
+                        const locate = new Locate({
+                            view: view,
+                            useHeadingEnabled: false,
+                            goToOverride: function(view, options) {
+                                options.target.scale = 1500;
+                                return view.goTo(options.target);
+                            }
+                        });
+                        view.ui.add(locate, "top-left");
+
+                        const track = new Track({
+                            view: view,
+                            graphic: new Graphic({
+                                symbol: {
+                                type: "simple-marker",
+                                size: "12px",
+                                color: "green",
+                                outline: {
+                                    color: "#efefef",
+                                    width: "1.5px"
+                                }
+                                }
+                            }),
+                            useHeadingEnabled: false
+                            });
+                         view.ui.add(track, "top-left");
+
                     // console.log(view);
+                        //For debugging purposes
                         view.when(function(){
                         // All the resources in the MapView and the map have loaded. Now execute additional processes
                             console.log("I have some data!");
