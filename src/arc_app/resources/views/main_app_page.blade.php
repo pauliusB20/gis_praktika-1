@@ -90,7 +90,7 @@
                         };
                         const simpleMarkerSymbol = {
                             type: "picture-marker",
-                            url: "https://static.arcgis.com/images/Symbols/Shapes/BlackStarLargeB.png",
+                            url: "https://img.icons8.com/ios/452/museum.png",
                             color: [226, 119, 40],  // Orange
                             height: "30px",
                             width: "30px",
@@ -194,7 +194,7 @@
     <body>
     <!-- Page header -->
         <div class="content">
-                <h2>MEGISA - Muzeum Explorer GIS Application</h2>
+                <h2>MEGISA - Museum Explorer GIS Application</h2>
         </div>
         <div id="mapView"></div>
         <!-- <div class="flex-center position-ref full-height">
