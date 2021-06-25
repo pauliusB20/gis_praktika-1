@@ -12,31 +12,31 @@
         <script src="https://js.arcgis.com/4.19/"></script>
 
         <script src="{{ asset('js/require.js')}}"></script>
-   
+
        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-      
+
         <!-- Main map code -->
         <script>
             require([
                      "esri/config",
-                     "esri/Map", 
+                     "esri/Map",
                      "esri/views/MapView",
                      "esri/layers/FeatureLayer",
                      "esri/widgets/Locate",
                      "esri/widgets/Track",
                      "esri/Graphic",
-                     "esri/layers/GraphicsLayer",                     
+                     "esri/layers/GraphicsLayer",
                      "esri/tasks/RouteTask",
                      "esri/tasks/support/RouteParameters",
                      "esri/tasks/support/FeatureSet"
-                     ], 
-                     function (esriConfig, 
-                               Map, 
-                               MapView, 
-                               FeatureLayer, 
+                     ],
+                     function (esriConfig,
+                               Map,
+                               MapView,
+                               FeatureLayer,
                                Locate,
                                Track,
                                Graphic,
@@ -57,7 +57,7 @@
                         //     map.graphics.on("click", myClickHandler);
                         // }); //For 3.36
 
-                
+
                         const view = new MapView({
                                         map: map,
                                         //center: [-118.80543,34.02700], // Longitude, latitude
@@ -101,17 +101,17 @@
                                 features: view.graphics.toArray()
                                 }),
                                 returnDirections: true
-                        });
-                        routeTask.solve(routeParams)
-                        .then(function(data) {
-                        data.routeResults.forEach(function(result) {
-                            result.route.symbol = {
-                            type: "simple-line",
-                            color: [5, 150, 255],
-                            width: 3
-                            };
-                            view.graphics.add(result.route);
-                        });
+                            });
+                            routeTask.solve(routeParams)
+                            .then(function(data) {
+                            data.routeResults.forEach(function(result) {
+                                result.route.symbol = {
+                                type: "simple-line",
+                                color: [5, 150, 255],
+                                width: 3
+                                };
+                                view.graphics.add(result.route);
+                            });
 
                         // Display directions
                         if (data.routeResults.length > 0) {
@@ -204,13 +204,13 @@
                         };
                         const simpleFillSymbol = {
                                 type: "simple-fill",
-                                color: [0, 255, 0, 0.5],  
+                                color: [0, 255, 0, 0.5],
                                 outline: {
                                     color: [0, 255, 0],
                                     width: 1
                                 }
                         };
-                        
+
                         //Drawing a polygon and adding pop ups to drawed geometry
                         const polygonPopTemplate = {
                             title: "{Name}",
@@ -263,7 +263,7 @@
                         });
 
                         map.add(trails,0);
-                        
+
                         // Define popup for Parks and Open Spaces
                         const popupOpenspaces = {
                             "title": "{PARK_NAME}",
@@ -322,7 +322,7 @@
                         });
 
                         map.add(openspaces,0);
-                        
+
                         // Geo Location tracking
                         const locate = new Locate({
                             view: view,
@@ -350,14 +350,14 @@
                             useHeadingEnabled: false
                             });
                          view.ui.add(track, "top-left");
-                        
+
                         //  view.on("click", function(event) { //For getting long/lat via mouse click
                         //     let lat = Math.round(event.mapPoint.latitude * 1000) / 1000;
                         //     let lon = Math.round(event.mapPoint.longitude * 1000) / 1000;
                         //     console.log("click event at: (lat=" + lat + ", long=" + lon + ")");
                         //  });
-                        
-                        
+
+
                     // console.log(view);
                         //For debugging purposes
                         view.when(function(){
@@ -432,13 +432,13 @@
         </head>
     <body>
          <div id="viewDiv"></div>
-        <!-- <div class="flex-center position-ref full-height"> 
+        <!-- <div class="flex-center position-ref full-height">
 
             <div class="content">
                 <h1>ARCGIS Test APP</h1>
 
-                
-               
+
+
 
             </div>
          </div>  -->

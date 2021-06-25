@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', 'MDataCollector@getMuzData')->name('mapdata');
 
-Route::get('/', function () {
-    return view('apppage');
-});
+//For testing and tutorials routes
+// Route::get('/', function () {
+//     return view('apppage');
+// });
 
 Route::get('/app', function () {
     return view('apppage');
