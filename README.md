@@ -1,5 +1,5 @@
 # <h1><em>MEGISA</em> - Museum Exploration GIS Application(Muziejų tyrinėjimo GIS aplikacija)</h1>
-<p>Tai internetinę, <em>Laravel</em> karkaso paremta, aplikacija, skirta susipažinti su tam tikro miesto muziejais.</p>
+<p>Tai internetinę, <em>Laravel</em> karkaso paremta, prototipinė aplikacija, skirta susipažinti su tam tikro miesto muziejais.</p>
 
 Pagrindiniai kodo failai Laravel karakaso kataloge:
 <ul>
