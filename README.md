@@ -15,7 +15,7 @@ Pagrindiniai kodo failai Laravel karakaso kataloge:
 Projekto pasileidimo instrukcija:
 <ul>
   <li>
-      Atsiųsti ir įsidiegti Windows versijos XAMPP.<br/>
+      Atsiųsti ir įsidiegti XAMPP.<br/>
       Nuorodą: https://www.apachefriends.org/download.html<br/>   
   </li>  
   <li>
