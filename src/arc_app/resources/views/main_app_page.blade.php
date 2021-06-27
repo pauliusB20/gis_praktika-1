@@ -54,12 +54,10 @@
 
             const view = new MapView({
                                        map: map,
-                                        //center: [-118.80543,34.02700], // Longitude, latitude
-                                        //center: [55.946185897155274, 23.302453535021],
                                         //center: [-40, 28],
-                                        center: [23.3023, 55.9461], //lon/lat
+                                        center: [23.31667, 55.93333], //lon/lat
                                         //zoom: 13, // Zoom level
-                                        zoom: 11,
+                                        zoom: 12,
                                         container: "mapView" // Div element
                                     });
             view.when(function(){
@@ -104,25 +102,30 @@
                         //     styleName: "Esri2DPointSymbolsStyle"
                         // });
                         // Pop up tempalte
-                        const polygonPopTemplate = {
-                            title: "{Name}",
-                            content: "{Description}"
+                        const pointPopTemplate = {
+                            title: "<b>{name}</b>",
+                            content: "{description}"
+                            // type: "image",
+                            // caption: "{description}",
+                            // value: {
+                            //     sourceURL: e.img_url
+                            // }
                         }
                         const popUpPolyAttributes = {
-                            Name: e.ins_name,
-                            Description: e.address + "\n\n" + e.description
+                            name: e.ins_name,
+                            description: "<em>" + e.address + "</em><br/><br/>" + e.description + "<img src = "+ e.img_url +"></img>"
                         }
 
                         const pointGraphic = new Graphic({
                             geometry: point,
                             symbol: simpleMarkerSymbol,
                             attributes: popUpPolyAttributes,
-                            popupTemplate: polygonPopTemplate
+                            popupTemplate: pointPopTemplate
                         });
 
                         graphicsLayer.add(pointGraphic);
 
-                        
+
                 });
             }
 
@@ -137,6 +140,8 @@
                 height: 80%;
                 width: 80%;
                 margin-left:10em;
+                border-style: solid;
+                border-width:5px;
             }
             html, body {
                 background-color: #fff;

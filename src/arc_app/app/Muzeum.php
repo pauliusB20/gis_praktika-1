@@ -16,6 +16,7 @@ class Muzeum extends Model
         'closingtime',
         'address',
         'description',
+        'image_url',
         'geo_id'
     ];
 }

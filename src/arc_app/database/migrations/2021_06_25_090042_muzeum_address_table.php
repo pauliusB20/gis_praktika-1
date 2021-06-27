@@ -26,6 +26,7 @@ class MuzeumAddressTable extends Migration
             $table->bigInteger('closingtime')->nullable();
             $table->string('address');
             $table->text('description');
+            $table->text('image_url');
             $table->bigInteger('geo_id')->references('id')->on('geo_location')->onDelete('cascade');
         });
 
