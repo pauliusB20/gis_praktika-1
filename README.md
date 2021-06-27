@@ -20,7 +20,25 @@ Projekto pasileidimo instrukcija:
   </li>  
   <li>
       Nusiklonuoti projektą į pasirinktą kompiuteryje katalogą.
-    <em>git clone </em>
+    <em>git clone https://github.com/pauliusB20/gis_praktika-1.git</em>
+  </li>
+  <li>
+    Komandinėje eilutėje nueiti į /gis_praktika-1/src/arc_app ktalogą 
+  </li>
+  <li>
+    Suvesti komanda <em>composer install</em>
+  </li>
+  <li>
+    Suvesti komandą <em>php artisan migrate:fresh</em>
+  </li>
+  <li>
+    Suvesti komandą <em>php artisan db:seed</em>
+  </li>
+  <li>
+    Suvesti komandą <em>php artisan serve</em>
+  </li>
+  <li>
+    Interneto naršyklėje suveskite <em>http://localhost:8000/</em>
   </li>
 </ul>
 
