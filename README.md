@@ -9,7 +9,7 @@ Pagrindiniai kodo failai Laravel karakaso kataloge:
   <li><em>database/migrations/2019_08_19_000000_create_failed_jobs_table.php</em> - Tai <em>Laravel</em> duomenų bazės migration failas, kuris sukuria testinę duomenų bazės lenteles.</li>
   <li><em>database/seeds/DatabaseSeeder.php</em> - Tai <em>Laravel</em> testinių duomenų bazės įrašų sugeneravimui seeder php failas.</li>
   <li><em>resources/views/main_app_page.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuris sukuria pagrindinį aplikacijos puslapį. Šiame faile yra pagrindinis ArcGIS API paremtos programos JavaScript kodas.</li>
-  <li><em>resources/views/apppage.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuriame testinis ArcGIS API paremtas puslapio kodas.</li>
-  <li><em>routes/web.php</em> - yra aprašytas pagrindinis internetinės svetainės puslapio routas, kuris užkrauna klientui aplikacijos puslapį.</li>
+  <li><em>resources/views/apppage.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuriame testinis <em>ArcGIS API</em> paremtas puslapio <em>HTML/Javascript</em> kodas.</li>
+  <li><em>routes/web.php</em> - yra aprašytas pagrindinis internetinės svetainės puslapio routas, kuris užkrauna klientui aplikacijos pagrindinį puslapį.</li>
 </ul>
 
