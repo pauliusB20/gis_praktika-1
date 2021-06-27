@@ -123,10 +123,40 @@
                             popupTemplate: pointPopTemplate
                         });
 
+
                         graphicsLayer.add(pointGraphic);
 
+                         // Geo Location tracking
+                         const locate = new Locate({
+                            view: view,
+                            useHeadingEnabled: false,
+                            goToLocationEnabled: false,
+                            goToOverride: function(view, options) {
+                                //console.log(options);
+                                return view.goTo(options.target);
+                            }
+                        });
 
+                        view.ui.add(locate, "top-left");
+
+                        const track = new Track({
+                            view: view,
+                            graphic: new Graphic({
+                                symbol: {
+                                type: "simple-marker",
+                                size: "12px",
+                                color: "lightgreen",
+                                outline: {
+                                    color: "#efefef",
+                                    width: "1.5px"
+                                 }
+                                }
+                            }),
+                            useHeadingEnabled: false
+                            });
+                         view.ui.add(track, "top-left");
                 });
+
             }
 
         });
@@ -199,7 +229,7 @@
     <body>
     <!-- Page header -->
         <div class="content">
-                <h2>MEGISA - Museum Explorer GIS Application</h2>
+                <h2><b>MEGISA - Museum Explorer GIS Application</b></h2>
         </div>
         <div id="mapView"></div>
         <!-- <div class="flex-center position-ref full-height">
