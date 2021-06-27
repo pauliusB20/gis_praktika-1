@@ -12,4 +12,15 @@ Pagrindiniai kodo failai Laravel karakaso kataloge:
   <li><em>resources/views/apppage.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuriame testinis <em>ArcGIS API</em> paremtas puslapio <em>HTML/Javascript</em> kodas.</li>
   <li><em>routes/web.php</em> - yra aprašytas pagrindinis internetinės svetainės puslapio routas, kuris užkrauna klientui aplikacijos pagrindinį puslapį.</li>
 </ul>
+Projekto pasileidimo instrukcija:
+<ul>
+  <li>
+      Atsiųsti ir įsidiegti Windows versijos XAMPP.<br/>
+      Nuorodą: https://www.apachefriends.org/download.html<br/>   
+  </li>  
+  <li>
+      Nusiklonuoti projektą į pasirinktą kompiuteryje katalogą.
+    <em>git clone </em>
+  </li>
+</ul>
 
