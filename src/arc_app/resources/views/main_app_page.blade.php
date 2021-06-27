@@ -19,7 +19,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
         <script>
-        //Main app code
+        //Main app code        
         require([
                      "esri/config",
                      "esri/Map",
@@ -31,7 +31,9 @@
                      "esri/layers/GraphicsLayer",
                      "esri/tasks/RouteTask",
                      "esri/tasks/support/RouteParameters",
-                     "esri/tasks/support/FeatureSet"
+                     "esri/tasks/support/FeatureSet",
+                     "esri/widgets/Legend",
+                     "esri/widgets/Legend/LegendViewModel"
                      ],
                      function (esriConfig,
                                Map,
@@ -43,7 +45,9 @@
                                GraphicsLayer,
                                RouteTask,
                                RouteParameters,
-                               FeatureSet
+                               FeatureSet,
+                               Legend,
+                               LegendVM
                                )
         {
             esriConfig.apiKey = "AAPK7c7895bf808a4f23b5d9f049944cebbdRBkAqsrkczQn96GKC9hWASWXII9K0ZIVOf8r2PUZgA8KfrpB4cYBBgUkZYwlWHo9";
@@ -68,6 +72,70 @@
                 console.log("The view's resources failed to load: ", error);
             });
 
+            //  Routing paths to buildings
+            const routeTask = new RouteTask({
+                                url: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
+            });
+            
+            function addGraphic(type, point) {
+                    const graphic = new Graphic({
+                                symbol: {
+                                type: "simple-marker",
+                                color: (type === "origin") ? "green" : "blue",
+                                size: "8px"
+                                },
+                                geometry: point,
+                                outline: {
+                                    color: [255, 255, 255], // White
+                                    width: 1
+                                }
+                     });
+                     view.graphics.add(graphic);
+            }
+            function getRoute() {
+                    const routeParams = new RouteParameters({
+                        stops: new FeatureSet({
+                            features: view.graphics.toArray()
+                        }),
+                        returnDirections: true
+                    });
+                    routeTask.solve(routeParams)
+                    .then(function(data) {
+                        data.routeResults.forEach(function(result) {
+                            result.route.symbol = {
+                                type: "simple-line",
+                                color: [0, 150, 100],
+                                width: 3
+                            };
+                            view.graphics.add(result.route);
+                        });
+
+                        // Display directions
+                        if (data.routeResults.length > 0) {
+                            const directions = document.createElement("ol");
+                            directions.classList = "esri-widget esri-widget--panel esri-directions__scroller";
+                            directions.style.marginTop = "0";
+                            directions.style.padding = "15px 15px 15px 30px";
+                            const features = data.routeResults[0].directions.features;
+
+                            // Show each direction
+                            features.forEach(function(result,i){
+                                const direction = document.createElement("li");
+                                var distance = (result.attributes.length.toFixed(2) * 1.609344);
+                                direction.innerHTML = result.attributes.text + " (" + distance + " km)";
+                                directions.appendChild(direction);
+                            });
+
+                            view.ui.empty("top-right");
+                            view.ui.add(directions, "top-right");
+                        }
+
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    })
+            }
+            
             //Debug route data
             const buildingData = {!! json_encode($buildings) !!};
             if (buildingData)
@@ -78,9 +146,31 @@
 
                 map.add(graphicsLayer);
                 //Placing muzeum icon symbols by using latitude and longitude coordinates
-                buildingData.forEach(function(e){
+                //var points = [];
+                let startPoint = {
+                    type: "point",  // autocasts as new Point()
+                    longitude: 23.3023,
+                    latitude: 55.9461
+                };
+                addGraphic("origin", startPoint); //Origin position
 
-                    //console.log(e.id);
+                // Adding graphic points and route destination points
+
+                buildingData.forEach(function(e)
+                {
+                        //let pointData = {"long": e.long, "lat": e.lat};
+                        // points.push(pointData);
+
+                        // Constructing route destination point
+                        let endPoint = {
+                            type: "point",  // autocasts as new Point()
+                            longitude: e.long,
+                            latitude: e.lat
+                        };
+                        addGraphic("destination", endPoint);
+                        getRoute();
+                        
+                        // Constructing legend icon with pop ups
                         const point = { //Create a point
                             type: "point",
                             longitude: e.long,
@@ -124,43 +214,83 @@
                         });
 
 
-                        graphicsLayer.add(pointGraphic);
+                        graphicsLayer.add(pointGraphic);                       
 
-                         // Geo Location tracking
-                         const locate = new Locate({
+                });
+                
+                // Geo Location tracking
+                const locator = new Locate({
                             view: view,
                             useHeadingEnabled: false,
                             goToLocationEnabled: false,
+                            popupEnabled: true,
                             goToOverride: function(view, options) {
-                                //console.log(options);
-                                return view.goTo(options.target);
+                                
+                                return view.goTo(options.target);                                
                             }
-                        });
-
-                        view.ui.add(locate, "top-left");
-
-                        const track = new Track({
-                            view: view,
-                            graphic: new Graphic({
-                                symbol: {
-                                type: "simple-marker",
-                                size: "12px",
-                                color: "lightgreen",
-                                outline: {
-                                    color: "#efefef",
-                                    width: "1.5px"
-                                 }
-                                }
-                            }),
-                            useHeadingEnabled: false
-                            });
-                         view.ui.add(track, "top-left");
                 });
 
+                view.ui.add(locator, "top-left");
+
+               //console.log(options.target);
+            //    locator.locate().then(function(event){
+            //            // Fires after the user's location has been found
+            //            console.log("User's location has been found!");
+            //            console.log(event);
+            //     });
+
+                // view.on("locate", function(event){
+                //     alert(event.position.coords.latitude + ", " + event.position.coords.longitude);
+                // });
+
+                const tracker = new Track({
+                                         view: view,
+                                         graphic: new Graphic({
+                                         symbol: {
+                                         type: "simple-marker",
+                                         size: "12px",
+                                         color: "lightgreen",
+                                         outline: {
+                                             color: "#efefef",
+                                             width: "1.5px"
+                                         }
+                                        }
+                                        }),
+                                         useHeadingEnabled: false
+                                    });
+                 view.ui.add(tracker, "top-left");
+
+                 var legendBox = new Legend({
+                                                view: view,
+                                                viewModel: new LegendVM({
+                                                    view: view
+                                                })
+                                            });
+
+                 view.ui.add(legendBox, "bottom-right");
+
+             
+                // Constructing the possible routes
+               
+                // points.forEach(function(e)
+                // {
+                //    
+
+                //     addGraphic("destination", endPoint);
+                //     getRoute();
+                // });
+               
             }
-
+           
         });
-
+        function displayDistance()
+        {
+                 //Routing paths
+                // const routeTask = new RouteTask({
+                //                 url: "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World"
+                // });  
+                alert("Getting data...");
+        }
         </script>
         <!-- Styles -->
         <style>
@@ -172,6 +302,9 @@
                 margin-left:10em;
                 border-style: solid;
                 border-width:5px;
+            }
+            #dist{
+                margin-left:10em;
             }
             html, body {
                 background-color: #fff;
@@ -229,9 +362,14 @@
     <body>
     <!-- Page header -->
         <div class="content">
-                <h2><b>MEGISA - Museum Explorer GIS Application</b></h2>
+                <h2>
+                    <img src = "https://img.icons8.com/ios/452/museum.png" style = "width:1.2em; height:1.2em;"></img>
+                    <b>MEGISA - Museum Explorer GIS Application</b>
+                    <img src = "https://img.icons8.com/ios/452/museum.png" style = "width:1.2em; height:1.2em;"></img>
+                </h2>
         </div>
         <div id="mapView"></div>
+        <button id = "dist" onclick="displayDistance();"><b>View distance</b></button>
         <!-- <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">
