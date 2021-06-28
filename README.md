@@ -39,7 +39,7 @@ Projekto pasileidimo instrukcija:
   </li>
   <li>
     Interneto naršyklėje suveskite <em>http://localhost:8000/</em>. Pamatysite pagrindinį aplikacijos puslapį. Tačiau, jeigu suvesite<br/>
-    <em>http://localhost:8000/app</em> pmatysite puslapį, kuriame mokinausi ir testavau kodą, kurį rašiau pagal dokumentacijos pavyzdžius.
+    <em>http://localhost:8000/app</em> pamatysite puslapį, kuriame mokinausi ir testavau kodą, kurį rašiau pagal dokumentacijos pavyzdžius.
   </li>
 </ul>
 
