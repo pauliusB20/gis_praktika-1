@@ -15,7 +15,7 @@ Pagrindiniai kodo failai Laravel karakaso kataloge:
 Projekto pasileidimo instrukcija:
 <ul>
   <li>
-      Atsiųsti ir įsidiegti XAMPP.<br/>
+      Atsiųsti ir įsidiegti XAMPP. <br/>
       Nuorodą: https://www.apachefriends.org/download.html<br/>   
   </li>  
   <li>
@@ -27,6 +27,21 @@ Projekto pasileidimo instrukcija:
   </li>
   <li>
     Suvesti komanda <em>composer install</em>
+  </li>
+  <li>
+    Nueiti į suinstaliuotos xampp programos katalogą
+  </li>
+  <li>
+   Paleisti <em>xampp-shell.bat</em>
+  </li>
+  <li>
+   Prisijungti prie duomenų bazės naudojant <em> mysql -u root</em>
+  </li>
+  <li>
+   Suvesti <em>create database arcgis</em>
+  </li>
+  <li>
+   Uždaryti <em>xampp-shell.bat</em> terminalą
   </li>
   <li>
     Suvesti komandą <em>php artisan migrate:fresh</em>
