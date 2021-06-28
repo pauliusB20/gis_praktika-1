@@ -10,7 +10,7 @@ Pagrindiniai kodo failai Laravel karakaso kataloge:
   <li><em>database/seeds/DatabaseSeeder.php</em> - Tai <em>Laravel</em> testinių duomenų bazės įrašų sugeneravimui seeder php failas.</li>
   <li><em>resources/views/main_app_page.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuris sukuria pagrindinį aplikacijos puslapį. Šiame faile yra pagrindinis ArcGIS API paremtos programos JavaScript kodas.</li>
   <li><em>resources/views/apppage.blade.php</em> - Tai <em>Laravel</em> blade php failas, kuriame testinis <em>ArcGIS API</em> paremtas puslapio <em>HTML/Javascript</em> kodas.</li>
-  <li><em>routes/web.php</em> - yra aprašytas pagrindinis internetinės svetainės puslapio routas, kuris užkrauna klientui aplikacijos pagrindinį puslapį.</li>
+  <li><em>routes/web.php</em> - yra svetainės routu kodo failas, kuriame yra aprašytas pagrindinis internetinės svetainės puslapio routas "/", kuris užkrauna klientui aplikacijos pagrindinį puslapį.</li>
 </ul>
 Projekto pasileidimo instrukcija:
 <ul>
